@@ -1,0 +1,46 @@
+version: "3.3"
+
+services :
+  redis:
+   image: redis
+   container_name: redis
+   volumes:
+    - redis_data:/data
+   ports:
+    - "6379:6379"
+
+  web:
+   container_name: web
+   build: .
+   volumes:
+    - .:/usr/src/app
+   command : python3 manage.py runserver 0.0.0.0:8000
+   ports:
+    - "8000:8000" 
+   depends_on:
+    - redis
+   environment:
+    - DJANGO_SETTINGS_MODULE=core.settings
+    - KAVENEGAR_API_KEY=75344D6B336B4D4A4A62334742594434736F48535065446339394C3132456A34455246562F7A514F5854493D
+    - SENDER_NUMBER=2000660110
+
+
+
+  celery:
+   build: .
+   command: celery -A core worker -l info
+   volumes:
+    - .:/usr/src/app
+   depends_on:
+   - redis  
+   environment:
+    - DJANGO_SETTINGS_MODULE=core.settings
+    - KAVENEGAR_API_KEY=75344D6B336B4D4A4A62334742594434736F48535065446339394C3132456A34455246562F7A514F5854493D
+    - SENDER_NUMBER=2000660110
+
+
+volumes:
+ redis_data:
+
+   
+

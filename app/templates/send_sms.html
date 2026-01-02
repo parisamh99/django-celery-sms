@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<HTML>
+    <head>
+        send sms
+    </head>
+    <body>
+        <h1>sent sms</h1>
+        <form method="post">
+          {% csrf_token %}
+          <input type="text" name="phone" placeholder="شماره موبایل" required>
+          <button type="submit">ارسال</button>
+        </form>
+        {% if message %}
+          <p>{{ message }}</p>
+        {% endif %}
+    </body>
+</HTML>
